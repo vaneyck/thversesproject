@@ -51,13 +51,12 @@ export default {
     handleSongEvent: function(songEventData) {
       if (songEventData.eventType == "play-song") {
         // this.currentSong = this.songs
-        alert("TODO Work in progress : Play");
         // var aud = new Audio("sound.ogg");
         // //Now lets play the music
         // aud.play();
       }
       if (songEventData.eventType == "pause-song") {
-        alert("TODO Work in progress : Pause");
+        //alert("TODO Work in progress : Pause");
       }
       if (songEventData.eventType == "add-song-to-playlist") {
         alert("TODO Work in progress : Add to playlist");
@@ -68,6 +67,9 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  height: inherit;
+}
 .all-songs {
   height: 80%;
   overflow: scroll;

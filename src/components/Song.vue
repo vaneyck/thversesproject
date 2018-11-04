@@ -1,17 +1,20 @@
 <template>
     <div class="song">
-        <div class="level is-mobile">
-          <div class="level-item level-left">
-            <figure class="image is-128x128">
-              <img :src="song.verseImage">
-            </figure>
+        <div class="song-container row">
+          <div class="song-image col s6">
+            <img class="responsive-img" :src="song.verseImage">
           </div>
-          <div class="level-item level-left">
-            <span>{{ song.title }}</span>
-          </div>
-          <div class="level-item">
-            <button class="button" @click="togglePlay(song.id)">{{ playingStatusText }}</button>
-            <button class="button" @click="addToPlayList(song.id)">Add to Playlist</button>
+          <div class="col s6">
+            <div class="song-title">{{ song.title }}</div>
+            <div class="song-controls">
+              <button class="play btn btn-small" @click="togglePlay(song)">
+                <i v-if="libraryIsPlaying" class="material-icons dp48">pause</i>
+                <i v-if="!libraryIsPlaying" class="material-icons dp48">play_arrow</i>
+              </button>
+              <button class="add-to-playlist btn btn-small" @click="addToPlayList(song)">
+                <i class="material-icons dp48">playlist_add</i>
+              </button>
+            </div>
           </div>
         </div>
     </div>
@@ -21,6 +24,7 @@
 export default {
   name: "Song",
   props: {
+    idPlaying: Number,
     song: Object
   },
   data() {
@@ -28,32 +32,46 @@ export default {
       currentlyPlaying: false
     };
   },
+  computed: {
+    libraryIsPlaying: function () {
+      return this.currentlyPlaying && (this.song.verse_id == this.idPlaying);
+    }
+  },
   methods: {
-    togglePlay: function(songId) {
+    togglePlay: function(song) {
       // TODO Read more here https://www.binarytides.com/using-html5-audio-element-javascript/
       if (this.currentlyPlaying) {
         this.currentlyPlaying = false;
-        this.$emit("song-event", { eventType: "pause-song", songId: songId });
+        this.$emit("song-event", { eventType: "pause-song", songId: song.verse_id });
+        M.toast({
+          html: "Pausing",
+          displayLength: 1000
+        });
       } else {
         this.currentlyPlaying = true;
-        this.$emit("song-event", { eventType: "play-song", songId: songId });
+        this.$emit("song-event", { eventType: "play-song", songId: song.verse_id });
+        M.toast({
+          html: "Playing " + song.title,
+          displayLength: 1500
+        });
       }
     },
-    addToPlayList: function(songId) {
+    addToPlayList: function(song) {
       this.$emit("song-event", {
         eventType: "add-song-to-playlist",
-        songId: songId
+        songId: song.verse_id
       });
-    }
-  },
-  computed: {
-    playingStatusText: function() {
-      if (this.currentlyPlaying) {
-        return "Pause";
-      } else {
-        return "Play";
-      }
     }
   }
 };
 </script>
+
+<style scoped>
+.play {
+  display: block;
+  margin-bottom: 2px;
+}
+.add-to-playlist {
+  display: block;
+}
+</style>

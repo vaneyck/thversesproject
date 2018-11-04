@@ -1,13 +1,39 @@
 <template>
   <div class="container">
-    <h1>The Verses Project</h1>
     <div class="all-songs">
-      <Song v-on:song-event="handleSongEvent" class="song" :song="song" v-for="(song, index) in songs" :key="index"/>
+      <div v-if="songs">
+        <div>
+          <Song v-on:song-event="handleSongEvent" class="song" :id-playing="currentSongIdPlaying" :song="song" v-for="(song, index) in songs" :key="index"/>
+        </div>
+      </div>
+      <div v-else class="center">
+        <div class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-blue-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="controls">
-      <button class="button">Previous</button>
-      <button class="button">Play</button>
-      <button class="button">Next</button>
+      <div class="now-playing">
+        <span v-if="nowPlaying">
+          Playing : {{ nowPlaying.title }}
+        </span>
+        <span v-else>
+          No Song Playing
+        </span>
+      </div>
+      <div>
+        <button class="btn">Previous</button>
+        <button class="btn">Play</button>
+        <button class="btn">Next</button>
+      </div>
     </div>
   </div>
 </template>
@@ -24,7 +50,8 @@ export default {
   data() {
     return {
       songs: null,
-      currentSong: null,
+      currentSongIdPlaying: null,
+      currentAudioPlaying: null,
       playlist: []
     };
   },
@@ -44,19 +71,37 @@ export default {
       this.songs = JSON.parse(body).songs;
     });
   },
+  computed: {
+    nowPlaying: function() {
+      if (this.songs) {
+        return this.songs.find(song => {
+          return song.verse_id == this.currentSongIdPlaying;
+        });
+      } else {
+        return null;
+      }
+    }
+  },
   methods: {
-    /**
-     * Receive event to togglePlaying a song
-     */
     handleSongEvent: function(songEventData) {
       if (songEventData.eventType == "play-song") {
-        // this.currentSong = this.songs
-        // var aud = new Audio("sound.ogg");
-        // //Now lets play the music
-        // aud.play();
+        var songToPlay = this.songs.find(song => {
+          return song.verse_id == songEventData.songId;
+        });
+        var songIsDifferent = this.currentSongIdPlaying != songToPlay.verse_id;
+        var aud;
+        if (this.currentAudioPlaying) {
+          if (songIsDifferent) {
+            this.currentAudioPlaying.pause();
+          }
+        }
+        aud = new Audio(songToPlay.mp3);
+        aud.play();
+        this.currentAudioPlaying = aud;
+        this.currentSongIdPlaying = songToPlay.verse_id;
       }
       if (songEventData.eventType == "pause-song") {
-        //alert("TODO Work in progress : Pause");
+        this.currentAudioPlaying.pause();
       }
       if (songEventData.eventType == "add-song-to-playlist") {
         alert("TODO Work in progress : Add to playlist");
@@ -68,6 +113,7 @@ export default {
 
 <style scoped>
 .container {
+  margin-top: 20px;
   height: inherit;
 }
 .all-songs {
@@ -76,5 +122,12 @@ export default {
 }
 .controls {
   height: 20%;
+  padding-top: 5px;
+}
+.controls button {
+  margin-left: 3px;
+}
+.now-playing {
+  padding-left: 5px;
 }
 </style>

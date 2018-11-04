@@ -1,18 +1,21 @@
 <template>
   <div id="app">
+    <Navbar/>
     <Library/>
   </div>
 </template>
 
 <script>
 import Library from "./components/Library.vue";
+import Navbar from "./components/Navbar.vue";
 
 export default {
   name: "app",
   components: {
-    Library
+    Library,
+    Navbar
   },
-  mounted: function () {
+  mounted: function() {
     this.determineBrowserDimensions();
   },
   methods: {
@@ -38,7 +41,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
   height: inherit;
   overflow: scroll;
 }

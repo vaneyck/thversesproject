@@ -104,7 +104,22 @@ export default {
         this.currentAudioPlaying.pause();
       }
       if (songEventData.eventType == "add-song-to-playlist") {
-        alert("TODO Work in progress : Add to playlist");
+        var song = this.playlist.find(song => {
+          return song == songEventData.songId;
+        });
+        console.log(song);
+        if (song) {
+          M.toast({
+            html: "Verse already in playlist",
+            displayLength: 1500
+          });
+        } else {
+          this.playlist.push(songEventData.songId);
+          M.toast({
+            html: "Adding verse to playlist",
+            displayLength: 1500
+          });
+        }
       }
     }
   }

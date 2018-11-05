@@ -7,33 +7,11 @@
         </div>
       </div>
       <div v-else class="center">
-        <div class="preloader-wrapper big active">
-          <div class="spinner-layer spinner-blue-only">
-            <div class="circle-clipper left">
-              <div class="circle"></div>
-            </div><div class="gap-patch">
-              <div class="circle"></div>
-            </div><div class="circle-clipper right">
-              <div class="circle"></div>
-            </div>
-          </div>
-        </div>
+        <Loading/>
       </div>
     </div>
     <div class="controls">
-      <div class="now-playing">
-        <span v-if="nowPlaying">
-          Playing : {{ nowPlaying.title }}
-        </span>
-        <span v-else>
-          No Song Playing
-        </span>
-      </div>
-      <div>
-        <button class="btn">Previous</button>
-        <button class="btn">Play</button>
-        <button class="btn">Next</button>
-      </div>
+      <Player :playlist="playlist"/>
     </div>
   </div>
 </template>
@@ -41,14 +19,17 @@
 <script>
 import request from "request";
 import Song from "./Song.vue";
+import Player from "./Player.vue";
+import Loading from "./Loading.vue";
 
 export default {
   name: "Library",
   components: {
-    Song
+    Song, Player, Loading
   },
   data() {
     return {
+      // TODO Move properties to vuex
       songs: null,
       currentSongIdPlaying: null,
       currentAudioPlaying: null,
@@ -72,6 +53,7 @@ export default {
     });
   },
   computed: {
+    // TODO move to Player
     nowPlaying: function() {
       if (this.songs) {
         return this.songs.find(song => {
@@ -83,6 +65,7 @@ export default {
     }
   },
   methods: {
+    // TODO All playing functions should be handled by the Player
     handleSongEvent: function(songEventData) {
       if (songEventData.eventType == "play-song") {
         var songToPlay = this.songs.find(song => {
@@ -107,7 +90,6 @@ export default {
         var song = this.playlist.find(song => {
           return song == songEventData.songId;
         });
-        console.log(song);
         if (song) {
           M.toast({
             html: "Verse already in playlist",

@@ -19,7 +19,7 @@
 <script>
 export default {
   props: {
-    playlist: Object
+    playlist: Array
   },
   data () {
     return {

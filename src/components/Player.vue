@@ -1,8 +1,8 @@
 <template>
     <div class="player">
       <div class="now-playing">
-        <span v-if="nowPlaying">
-          Playing : {{ nowPlaying.title }}
+        <span v-if="currentlyPlayingSong">
+          Playing : {{ currentlyPlayingSong.title }}
         </span>
         <span v-else>
           No Song Playing

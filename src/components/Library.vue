@@ -21,6 +21,7 @@ import request from "request";
 import Song from "./Song.vue";
 import Player from "./Player.vue";
 import Loading from "./Loading.vue";
+import Constants from "../util/constants.js";
 
 export default {
   name: "Library",
@@ -30,10 +31,8 @@ export default {
   data() {
     return {
       // TODO Move properties to vuex
-      songs: null,
       currentSongIdPlaying: null,
       currentAudioPlaying: null,
-      playlist: []
     };
   },
   mounted: function() {
@@ -49,10 +48,16 @@ export default {
       }
     };
     request(options, (error, response, body) => {
-      this.songs = JSON.parse(body).songs;
+      this.$store.dispatch('setVerses', JSON.parse(body).songs);
     });
   },
   computed: {
+    songs: function () {
+      return this.$store.getters.getVerses;
+    },
+    playlist: function () {
+      return this.$store.getters.getPlaylist;
+    },
     // TODO move to Player
     nowPlaying: function() {
       if (this.songs) {
@@ -67,7 +72,7 @@ export default {
   methods: {
     // TODO All playing functions should be handled by the Player
     handleSongEvent: function(songEventData) {
-      if (songEventData.eventType == "play-song") {
+      if (songEventData.eventType == Constants.Events.PLAY) {
         var songToPlay = this.songs.find(song => {
           return song.verse_id == songEventData.songId;
         });
@@ -83,10 +88,10 @@ export default {
         this.currentAudioPlaying = aud;
         this.currentSongIdPlaying = songToPlay.verse_id;
       }
-      if (songEventData.eventType == "pause-song") {
+      else if (songEventData.eventType == Constants.Events.PAUSE) {
         this.currentAudioPlaying.pause();
       }
-      if (songEventData.eventType == "add-song-to-playlist") {
+      else if (songEventData.eventType == Constants.Events.ADD_TO_PLAYLIST) {
         var song = this.playlist.find(song => {
           return song == songEventData.songId;
         });
@@ -96,7 +101,7 @@ export default {
             displayLength: 1500
           });
         } else {
-          this.playlist.push(songEventData.songId);
+          this.$store.dispatch('addToPlaylist', songEventData.songId);
           M.toast({
             html: "Adding verse to playlist",
             displayLength: 1500

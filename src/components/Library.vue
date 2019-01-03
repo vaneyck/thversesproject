@@ -10,23 +10,19 @@
         <Loading/>
       </div>
     </div>
-    <div class="controls">
-      <Player :playlist="playlist"/>
-    </div>
   </div>
 </template>
 
 <script>
 import request from "request";
 import Song from "./Song.vue";
-import Player from "./Player.vue";
 import Loading from "./Loading.vue";
 import Constants from "../util/constants.js";
 
 export default {
   name: "Library",
   components: {
-    Song, Player, Loading
+    Song, Loading
   },
   data() {
     return {
@@ -121,13 +117,6 @@ export default {
 .all-songs {
   height: 80%;
   overflow: scroll;
-}
-.controls {
-  height: 20%;
-  padding-top: 5px;
-}
-.controls button {
-  margin-left: 3px;
 }
 .now-playing {
   padding-left: 5px;

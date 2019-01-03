@@ -2,18 +2,23 @@
   <div id="app">
     <Navbar/>
     <Library/>
+    <div class="controls">
+      <Player/>
+    </div>
   </div>
 </template>
 
 <script>
 import Library from "./components/Library.vue";
 import Navbar from "./components/Navbar.vue";
+import Player from "./components/Player.vue";
 
 export default {
   name: "app",
   components: {
     Library,
-    Navbar
+    Navbar,
+    Player
   },
   mounted: function() {
     this.determineBrowserDimensions();
@@ -47,5 +52,12 @@ export default {
 body {
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
+}
+.controls {
+  height: 20%;
+  padding-top: 5px;
+}
+.controls button {
+  margin-left: 3px;
 }
 </style>

@@ -18,8 +18,10 @@
 
 <script>
 export default {
-  props: {
-    playlist: Array
+  computed: {
+    playlist: function () {
+      return this.$store.getters.getPlaylist;
+    }
   },
   data () {
     return {

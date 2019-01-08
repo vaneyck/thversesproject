@@ -1,14 +1,12 @@
 <template>
-  <div class="container">
-    <div class="all-songs">
-      <div v-if="songs">
-        <div>
-          <Song v-on:song-event="handleSongEvent" class="song" :id-playing="currentSongIdPlaying" :song="song" v-for="(song, index) in songs" :key="index"/>
-        </div>
+  <div>
+    <div v-if="songs">
+      <div>
+        <Song v-on:song-event="handleSongEvent" class="song" :id-playing="currentSongIdPlaying" :song="song" v-for="(song, index) in songs" :key="index"/>
       </div>
-      <div v-else class="center">
-        <Loading/>
-      </div>
+    </div>
+    <div v-else class="center">
+      <Loading/>
     </div>
   </div>
 </template>
@@ -108,17 +106,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.container {
-  margin-top: 20px;
-  height: inherit;
-}
-.all-songs {
-  height: 80%;
-  overflow: scroll;
-}
-.now-playing {
-  padding-left: 5px;
-}
-</style>

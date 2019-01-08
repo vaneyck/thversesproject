@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <Navbar/>
-    <Library/>
-    <div class="controls">
+    <div class="container all-songs">
+      <Library/>
+    </div>
+    <div class="container controls">
       <Player/>
     </div>
   </div>
@@ -59,5 +61,10 @@ body {
 }
 .controls button {
   margin-left: 3px;
+}
+.all-songs {
+  margin-top: 20px;
+  height: 80%;
+  overflow: scroll;
 }
 </style>

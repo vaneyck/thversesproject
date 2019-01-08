@@ -30,3 +30,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.now-playing {
+  padding-left: 5px;
+}
+</style>

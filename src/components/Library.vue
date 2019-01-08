@@ -2,7 +2,7 @@
   <div>
     <div v-if="songs">
       <div>
-        <Song v-on:song-event="handleSongEvent" class="song" :id-playing="currentSongIdPlaying" :song="song" v-for="(song, index) in songs" :key="index"/>
+        <Song v-on:song-event="handleSongEvent" class="song" :id-playing="currentVerseIdPlaying" :song="song" v-for="(song, index) in songs" :key="index"/>
       </div>
     </div>
     <div v-else class="center">
@@ -25,7 +25,6 @@ export default {
   data() {
     return {
       // TODO Move properties to vuex
-      currentSongIdPlaying: null,
       currentAudioPlaying: null,
     };
   },
@@ -46,6 +45,9 @@ export default {
     });
   },
   computed: {
+    currentVerseIdPlaying: function () {
+      return this.$store.getters.getCurrentVerseIdPlaying;
+    },
     songs: function () {
       return this.$store.getters.getVerses;
     },
@@ -56,7 +58,7 @@ export default {
     nowPlaying: function() {
       if (this.songs) {
         return this.songs.find(song => {
-          return song.verse_id == this.currentSongIdPlaying;
+          return song.verse_id == this.currentVerseIdPlaying;
         });
       } else {
         return null;
@@ -70,7 +72,7 @@ export default {
         var songToPlay = this.songs.find(song => {
           return song.verse_id == songEventData.songId;
         });
-        var songIsDifferent = this.currentSongIdPlaying != songToPlay.verse_id;
+        var songIsDifferent = this.currentVerseIdPlaying != songToPlay.verse_id;
         var aud;
         if (this.currentAudioPlaying) {
           if (songIsDifferent) {
@@ -80,7 +82,7 @@ export default {
         aud = new Audio(songToPlay.mp3);
         aud.play();
         this.currentAudioPlaying = aud;
-        this.currentSongIdPlaying = songToPlay.verse_id;
+        this.$store.dispatch('setCurrentVerseIdPlaying', songToPlay.verse_id);
       }
       else if (songEventData.eventType == Constants.Events.PAUSE) {
         this.currentAudioPlaying.pause();

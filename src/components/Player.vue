@@ -25,7 +25,8 @@ export default {
   },
   data () {
     return {
-      currentlyPlayingSong: null
+      currentlyPlayingVerse: null, // Get this from vuex
+      currentAudioPlaying: null, // This is the audio object
     }
   }
 };

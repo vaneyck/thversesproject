@@ -24,8 +24,6 @@ export default {
   },
   data() {
     return {
-      // TODO Move properties to vuex
-      currentAudioPlaying: null,
     };
   },
   mounted: function() {
@@ -54,38 +52,20 @@ export default {
     playlist: function () {
       return this.$store.getters.getPlaylist;
     },
-    // TODO move to Player
-    nowPlaying: function() {
-      if (this.songs) {
-        return this.songs.find(song => {
-          return song.verse_id == this.currentVerseIdPlaying;
-        });
-      } else {
-        return null;
-      }
-    }
+    currentAudioPlaying: function () {
+      return this.$store.getters.getCurrentAudioPlaying;
+    },
   },
   methods: {
     // TODO All playing functions should be handled by the Player
     handleSongEvent: function(songEventData) {
       if (songEventData.eventType == Constants.Events.PLAY) {
-        var songToPlay = this.songs.find(song => {
-          return song.verse_id == songEventData.songId;
-        });
-        var songIsDifferent = this.currentVerseIdPlaying != songToPlay.verse_id;
-        var aud;
-        if (this.currentAudioPlaying) {
-          if (songIsDifferent) {
-            this.currentAudioPlaying.pause();
-          }
-        }
-        aud = new Audio(songToPlay.mp3);
-        aud.play();
-        this.currentAudioPlaying = aud;
-        this.$store.dispatch('setCurrentVerseIdPlaying', songToPlay.verse_id);
+        this.$store.dispatch('setCurrentVerseIdPlaying', songEventData.songId);
       }
       else if (songEventData.eventType == Constants.Events.PAUSE) {
-        this.currentAudioPlaying.pause();
+        if (this.currentAudioPlaying){
+          this.currentAudioPlaying.pause();
+        }
       }
       else if (songEventData.eventType == Constants.Events.ADD_TO_PLAYLIST) {
         var song = this.playlist.find(song => {

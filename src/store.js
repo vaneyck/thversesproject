@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     currentVerseIdPlaying: null,
     verses: null,
-    playlist: []
+    playlist: [],
+    currentAudioPlaying: null
   },
   getters: {
     getVerses (state) {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     },
     getCurrentVerseIdPlaying (state) {
       return state.currentVerseIdPlaying;
+    },
+    getCurrentAudioPlaying (state) {
+      return state.currentAudioPlaying;
     }
   },
   mutations: {
@@ -29,6 +33,9 @@ export default new Vuex.Store({
     },
     setCurrentVerseIdPlaying (state, verseId) {
       state.currentVerseIdPlaying = verseId;
+    },
+    setCurrentAudioPlaying (state, audio) {
+      state.currentAudioPlaying =  audio;
     }
   },
   actions: {
@@ -40,6 +47,9 @@ export default new Vuex.Store({
     },
     setCurrentVerseIdPlaying (context, verseId) {
       context.commit('setCurrentVerseIdPlaying',verseId);
+    },
+    setCurrentAudioPlaying (context, audio) {
+      context.commit('setCurrentAudioPlaying', audio);
     }
   }
 })

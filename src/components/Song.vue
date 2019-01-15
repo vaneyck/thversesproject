@@ -67,18 +67,17 @@ export default {
         });
       }
     },
-    addToPlayList: function(song) {
-      var song = this.playlist.find(song => {
-        return song == song.verse_id;
+    addToPlayList: function(verse) {
+      var song = this.playlist.find(verseId => {
+        return verse.verse_id == verseId;
       });
-      console.log(song);
       if (song) {
         M.toast({
-          html: "Verse already in playlist",
+          html: `Verse is already in the playlist`,
           displayLength: 1500
         });
       } else {
-        this.$store.dispatch('addToPlaylist', song.verse_id);
+        this.$store.dispatch('addToPlaylist', verse.verse_id);
         M.toast({
           html: "Adding verse to playlist",
           displayLength: 1500

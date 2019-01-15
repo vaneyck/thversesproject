@@ -2,7 +2,7 @@
     <div class="player">
       <div class="now-playing">
         <span v-if="currentlyPlayingVerse">
-          Playing : {{ currentlyPlayingVerse.title }}
+          Playing : {{ currentlyPlayingVerse.title }} == {{ currentAudioTime }} / {{fullAudioTime}}
         </span>
         <span v-else>
           No Song Playing
@@ -10,22 +10,20 @@
       </div>
       <div>
         <button class="btn">Previous</button>
-        <button class="btn">Play</button>
+        <button class="btn" @click="togglePlay"> {{playLabel}} </button>
         <button class="btn">Next</button>
+        <button class="btn">Show Playlist</button>
       </div>
     </div>
 </template>
 
 <script>
+import Constants from "../util/constants.js";
+
 export default {
-  computed: {
-    playlist: function () {
-      return this.$store.getters.getPlaylist;
-    }
-  },
   data () {
     return {
-      //currentAudioPlaying: null, // This is the audio object
+      // TODO
     }
   },
   computed: {
@@ -47,22 +45,73 @@ export default {
     songs: function () {
       return this.$store.getters.getVerses;
     },
+    playlist: function () {
+      return this.$store.getters.getPlaylist;
+    },
+    playerState: function () {
+      return this.$store.getters.getPlayerState;
+    },
+    playerCommand: function () {
+      return this.$store.getters.getPlayerCommand;
+    },
+    playLabel: function () {
+      if (this.playerState == Constants.PlayerState.PAUSED) {
+        return "PLAY";
+      } else if (this.playerState == Constants.PlayerState.PLAYING) {
+        return "PAUSE";
+      } else {
+        return "- -"
+      }
+    },
+    currentAudioTime: function () {
+      if (this.currentAudioPlaying) {
+        return this.currentAudioPlaying.currentTime;
+      }
+    },
+    fullAudioTime: function () {
+      if (this.currentAudioPlaying) {
+        return this.currentAudioPlaying.duration;
+      }
+    }
   },
   watch: {
-    currentVerseIdPlaying: function (newVerse, oldVerse) {
-      var songToPlay = this.songs.find(song => {
-        return song.verse_id == newVerse;
-      });
-      var songIsDifferent = this.currentVerseIdPlaying != songToPlay.verse_id;
-      var aud;
-      if (this.currentAudioPlaying) {
-        if (songIsDifferent) {
-          this.currentAudioPlaying.pause();
+    playerCommand: function (newCommand, oldCommand) {
+      var pause = (newCommand == Constants.PlayerCommand.PAUSE);
+      if (pause) {
+        this.pauseVerse();
+      } else {
+        this.pauseVerse();
+        this.playVerse(this.currentVerseIdPlaying);
+      }
+    }
+  },
+  methods: {
+    togglePlay: function () {
+      //FIXME trigger a PlayerCommand
+      if (this.playerState == Constants.PlayerState.PAUSED) {
+        if (this.currentAudioPlaying) {
+          this.playVerse(this.currentVerseIdPlaying);
+        }
+      } else if (this.playerState == Constants.PlayerState.PLAYING) {
+        if (this.currentAudioPlaying) {
+          this.pauseVerse();
         }
       }
-      aud = new Audio(songToPlay.mp3);
+    },
+    pauseVerse: function () {
+      if (this.currentAudioPlaying) {
+        this.currentAudioPlaying.pause();
+        this.$store.dispatch('setPlayerState', Constants.PlayerState.PAUSED);
+      }
+    },
+    playVerse: function(verseId) {
+      var songToPlay = this.songs.find(song => {
+        return song.verse_id == verseId;
+      });
+      var aud = new Audio(songToPlay.mp3);
       aud.play();
       this.$store.dispatch('setCurrentAudioPlaying', aud);
+      this.$store.dispatch('setPlayerState', Constants.PlayerState.PLAYING);
     }
   }
 };

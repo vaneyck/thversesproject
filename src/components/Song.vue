@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import Constants from "../util/constants.js";
+
 export default {
   name: "Song",
   props: {
@@ -35,21 +37,30 @@ export default {
   computed: {
     libraryIsPlaying: function () {
       return this.currentlyPlaying && (this.song.verse_id == this.idPlaying);
-    }
+    },
+    currentAudioPlaying: function () {
+      return this.$store.getters.getCurrentAudioPlaying;
+    },
+    playlist: function () {
+      return this.$store.getters.getPlaylist;
+    },
   },
   methods: {
     togglePlay: function(song) {
       // TODO Read more here https://www.binarytides.com/using-html5-audio-element-javascript/
       if (this.currentlyPlaying) {
         this.currentlyPlaying = false;
-        this.$emit("song-event", { eventType: "pause-song", songId: song.verse_id });
+        if (this.currentAudioPlaying) {
+          this.$store.dispatch('setPlayerCommand', Constants.PlayerCommand.PAUSE);
+        }
         M.toast({
           html: "Pausing",
           displayLength: 1000
         });
       } else {
         this.currentlyPlaying = true;
-        this.$emit("song-event", { eventType: "play-song", songId: song.verse_id });
+        this.$store.dispatch('setCurrentVerseIdPlaying', song.verse_id);
+        this.$store.dispatch('setPlayerCommand', Constants.PlayerCommand.PLAY);
         M.toast({
           html: "Playing " + song.title,
           displayLength: 1500
@@ -57,10 +68,22 @@ export default {
       }
     },
     addToPlayList: function(song) {
-      this.$emit("song-event", {
-        eventType: "add-song-to-playlist",
-        songId: song.verse_id
+      var song = this.playlist.find(song => {
+        return song == song.verse_id;
       });
+      console.log(song);
+      if (song) {
+        M.toast({
+          html: "Verse already in playlist",
+          displayLength: 1500
+        });
+      } else {
+        this.$store.dispatch('addToPlaylist', song.verse_id);
+        M.toast({
+          html: "Adding verse to playlist",
+          displayLength: 1500
+        });
+      }
     }
   }
 };

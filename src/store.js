@@ -1,14 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import Constants from "./util/constants.js";
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    currentVerseIdPlaying: null,
     verses: null,
     playlist: [],
-    currentAudioPlaying: null
+    player: {
+      currentVerseIdPlaying: null,
+      currentAudioPlaying: null,
+      playerState: Constants.PlayerState.STOPPED,
+      playerCommand: null
+    }
   },
   getters: {
     getVerses (state) {
@@ -18,10 +24,16 @@ export default new Vuex.Store({
       return state.playlist;
     },
     getCurrentVerseIdPlaying (state) {
-      return state.currentVerseIdPlaying;
+      return state.player.currentVerseIdPlaying;
     },
     getCurrentAudioPlaying (state) {
-      return state.currentAudioPlaying;
+      return state.player.currentAudioPlaying;
+    },
+    getPlayerState (state) {
+      return state.player.playerState;
+    },
+    getPlayerCommand (state) {
+      return state.player.playerCommand;
     }
   },
   mutations: {
@@ -32,10 +44,16 @@ export default new Vuex.Store({
       state.playlist.push(verseId);
     },
     setCurrentVerseIdPlaying (state, verseId) {
-      state.currentVerseIdPlaying = verseId;
+      state.player.currentVerseIdPlaying = verseId;
     },
     setCurrentAudioPlaying (state, audio) {
-      state.currentAudioPlaying =  audio;
+      state.player.currentAudioPlaying =  audio;
+    },
+    setPlayerState (state, status) {
+      state.player.playerState = status;
+    },
+    setPlayerCommand (state, command) {
+      state.player.playerCommand = command;
     }
   },
   actions: {
@@ -50,6 +68,12 @@ export default new Vuex.Store({
     },
     setCurrentAudioPlaying (context, audio) {
       context.commit('setCurrentAudioPlaying', audio);
+    },
+    setPlayerState (context, status) {
+      context.commit('setPlayerState', status);
+    },
+    setPlayerCommand (context, command) {
+      context.commit('setPlayerCommand', command);
     }
   }
 })

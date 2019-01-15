@@ -2,7 +2,7 @@
   <div>
     <div v-if="songs">
       <div>
-        <Song v-on:song-event="handleSongEvent" class="song" :id-playing="currentVerseIdPlaying" :song="song" v-for="(song, index) in songs" :key="index"/>
+        <Song class="song" :id-playing="currentVerseIdPlaying" :song="song" v-for="(song, index) in songs" :key="index"/>
       </div>
     </div>
     <div v-else class="center">
@@ -59,31 +59,6 @@ export default {
   methods: {
     // TODO All playing functions should be handled by the Player
     handleSongEvent: function(songEventData) {
-      if (songEventData.eventType == Constants.Events.PLAY) {
-        this.$store.dispatch('setCurrentVerseIdPlaying', songEventData.songId);
-      }
-      else if (songEventData.eventType == Constants.Events.PAUSE) {
-        if (this.currentAudioPlaying){
-          this.currentAudioPlaying.pause();
-        }
-      }
-      else if (songEventData.eventType == Constants.Events.ADD_TO_PLAYLIST) {
-        var song = this.playlist.find(song => {
-          return song == songEventData.songId;
-        });
-        if (song) {
-          M.toast({
-            html: "Verse already in playlist",
-            displayLength: 1500
-          });
-        } else {
-          this.$store.dispatch('addToPlaylist', songEventData.songId);
-          M.toast({
-            html: "Adding verse to playlist",
-            displayLength: 1500
-          });
-        }
-      }
     }
   }
 };

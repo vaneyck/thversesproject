@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar-fixed">
+    <div class="navbar">
         <nav>
             <div class="nav-wrapper">
                 <a href="#" class="brand-logo">The Verses Project</a>

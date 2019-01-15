@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <Navbar/>
+    <div class="navigation">
+      <Navbar/>
+    </div>
     <div class="container all-songs">
       <Library/>
     </div>
@@ -55,15 +57,17 @@ body {
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
 }
+.navigation {
+  margin-bottom: 10px;
+}
 .controls {
-  height: 20%;
   padding-top: 5px;
 }
 .controls button {
   margin-left: 3px;
 }
 .all-songs {
-  margin-top: 20px;
+  padding-top: 10px;
   height: 80%;
   overflow: scroll;
 }

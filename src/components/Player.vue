@@ -9,7 +9,7 @@
         </span>
       </div>
       <div>
-        <button class="btn">
+        <button class="btn" @click="goToPreviousSong">
           <i class="material-icons dp48">skip_previous</i>
         </button>
         <button class="btn" @click="togglePlay">
@@ -17,7 +17,7 @@
           <i v-if="(playerState == 'paused')" class="material-icons dp48">play_arrow</i>
           <i v-if="(playerState == 'stopped')" class="material-icons dp48">start_rate</i>
         </button>
-        <button class="btn">
+        <button class="btn" @click="goToNextSong">
           <i class="material-icons dp48">skip_next</i>
         </button>
         <button class="btn">
@@ -122,7 +122,20 @@ export default {
       aud.play();
       this.$store.dispatch('setCurrentAudioPlaying', aud);
       this.$store.dispatch('setPlayerState', Constants.PlayerState.PLAYING);
-    }
+    },
+    goToNextSong: function () {
+      if (this.playlist.length == 0) {
+        return;
+      }
+      let currentPlayingVerseIndexInPlaylist = this.playlist.indexOf(this.currentVerseIdPlaying);
+      let verseIdToPlay = this.playlist[currentPlayingVerseIndexInPlaylist + 1];
+      if (this.playlist.length == currentPlayingVerseIndexInPlaylist + 1) {
+        return;
+      }
+      this.$store.dispatch('setCurrentVerseIdPlaying', verseIdToPlay);
+      this.$store.dispatch('setPlayerCommand', Constants.PlayerCommand.PLAY);
+    },
+    goToPreviousSong: function () {},
   }
 };
 </script>

@@ -9,10 +9,20 @@
         </span>
       </div>
       <div>
-        <button class="btn">Previous</button>
-        <button class="btn" @click="togglePlay"> {{playLabel}} </button>
-        <button class="btn">Next</button>
-        <button class="btn">Show Playlist</button>
+        <button class="btn">
+          <i class="material-icons dp48">skip_previous</i>
+        </button>
+        <button class="btn" @click="togglePlay">
+          <i v-if="(playerState == 'playing')" class="material-icons dp48">pause</i>
+          <i v-if="(playerState == 'paused')" class="material-icons dp48">play_arrow</i>
+          <i v-if="(playerState == 'stopped')" class="material-icons dp48">start_rate</i>
+        </button>
+        <button class="btn">
+          <i class="material-icons dp48">skip_next</i>
+        </button>
+        <button class="btn">
+          <i class="material-icons dp48">queue</i>
+        </button>
       </div>
     </div>
 </template>

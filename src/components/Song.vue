@@ -12,7 +12,8 @@
                 <i v-if="!libraryIsPlaying" class="material-icons dp48">play_arrow</i>
               </button>
               <button class="add-to-playlist btn btn-small" @click="addToPlayList(song)">
-                <i class="material-icons dp48">playlist_add</i>
+                <i v-if="!songInPlaylist" class="material-icons dp48">playlist_add</i>
+                <i v-if="songInPlaylist" class="material-icons dp48">playlist_add_check</i>
               </button>
             </div>
           </div>
@@ -44,6 +45,9 @@ export default {
     playlist: function () {
       return this.$store.getters.getPlaylist;
     },
+    songInPlaylist: function () {
+      return this.playlist.indexOf(this.song.verse_id) > -1;
+    }
   },
   methods: {
     togglePlay: function(song) {

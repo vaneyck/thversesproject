@@ -2,7 +2,7 @@
     <div class="player">
       <div class="now-playing">
         <span v-if="currentlyPlayingVerse">
-          Playing : {{ currentlyPlayingVerse.title }} == {{ currentAudioTime }} / {{fullAudioTime}}
+          {{this.currentVerseIdPlaying}} : Playing : {{ currentlyPlayingVerse.title }} == {{ currentAudioTime }} / {{fullAudioTime}}
         </span>
         <span v-else>
           No Song Playing
@@ -15,7 +15,7 @@
         <button class="btn" @click="togglePlay">
           <i v-if="(playerState == 'playing')" class="material-icons dp48">pause</i>
           <i v-if="(playerState == 'paused')" class="material-icons dp48">play_arrow</i>
-          <i v-if="(playerState == 'stopped')" class="material-icons dp48">start_rate</i>
+          <i v-if="(playerState == 'stopped')" class="material-icons dp48">play_arrow</i>
         </button>
         <button class="btn" @click="goToNextSong">
           <i class="material-icons dp48">skip_next</i>
@@ -90,6 +90,7 @@ export default {
       if (pause) {
         this.pauseVerse();
       } else {
+        console.log("playing", this.currentVerseIdPlaying);
         this.pauseVerse();
         this.playVerse(this.currentVerseIdPlaying);
       }
@@ -106,9 +107,12 @@ export default {
         if (this.currentAudioPlaying) {
           this.pauseVerse();
         }
+      } else {
+        this.goToNextSong();
       }
     },
     pauseVerse: function () {
+      console.log("pausing", this.currentAudioPlaying)
       if (this.currentAudioPlaying) {
         this.currentAudioPlaying.pause();
         this.$store.dispatch('setPlayerState', Constants.PlayerState.PAUSED);
@@ -125,17 +129,32 @@ export default {
     },
     goToNextSong: function () {
       if (this.playlist.length == 0) {
+        console.log("returning because playlist size is ZERO")
         return;
       }
       let currentPlayingVerseIndexInPlaylist = this.playlist.indexOf(this.currentVerseIdPlaying);
       let verseIdToPlay = this.playlist[currentPlayingVerseIndexInPlaylist + 1];
       if (this.playlist.length == currentPlayingVerseIndexInPlaylist + 1) {
+        console.log("returning because end of playlist")
         return;
       }
       this.$store.dispatch('setCurrentVerseIdPlaying', verseIdToPlay);
       this.$store.dispatch('setPlayerCommand', Constants.PlayerCommand.PLAY);
     },
-    goToPreviousSong: function () {},
+    goToPreviousSong: function () {
+      if (this.playlist.length == 0) {
+        console.log("returning because playlist size is ZERO")
+        return;
+      }
+      let currentPlayingVerseIndexInPlaylist = this.playlist.indexOf(this.currentVerseIdPlaying);
+      let verseIdToPlay = this.playlist[currentPlayingVerseIndexInPlaylist - 1];
+      if (currentPlayingVerseIndexInPlaylist - 1 == -1) {
+        console.log("returning because at the start of playlist")
+        return;
+      }
+      this.$store.dispatch('setCurrentVerseIdPlaying', verseIdToPlay);
+      this.$store.dispatch('setPlayerCommand', Constants.PlayerCommand.PLAY);
+    },
   }
 };
 </script>

@@ -1,0 +1,6 @@
+sonar-scanner \
+  -Dsonar.projectKey=vaneyck_thversesproject \
+  -Dsonar.organization=vaneyck-github \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.login=ca1dec1bc7ec9349c8c8a5442a19fdff3c128cc5

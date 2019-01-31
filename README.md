@@ -1,5 +1,7 @@
 # theversesproject
 
+[![Build Status](https://travis-ci.org/vaneyck/thversesproject.svg?branch=master)](https://travis-ci.org/vaneyck/thversesproject)
+
 ## Project setup
 ```
 npm install

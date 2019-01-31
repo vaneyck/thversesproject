@@ -3,3 +3,9 @@ node_js:
   - "8.2.1"
 script:
   - npm run build
+  - sonar-scanner
+addons:
+  sonarcloud:
+    organization: "vaneyck-github"
+    token:
+      secure: vwQXM5JPfcikLachQC+a+7Pf6yt+CnSrJDXTLLD3uFpEeP8D/BbWGdIphZwM5h5fXrZ7sEQsXxcdp4YrZeEwN4DHjmfVtKT9zY95J4WNt+unVEPOE6VFQcP2CJSN6mPiD+Jns3J6XUO1AQ11xL2waPlvJk1IDgLcbBx2UBU1O+qdYvyZ4hGjwNOEG2L/JZpQ8EE9GY3L1zv80mO2Ud14rqYFedaNCZ8c222EJV7ZXMg6YVpXZLCbL6qAQHLNszFhyleeDJtxwnDsJTVvV8YG9ZDduPeYk0N/+7+mZxU8wQOgyEeqO5X637sVY1GH2Cqre+erfjuJLhjGRgc2rqR4cv8mZpQlgvxabnAxXlTwInobUcZrR0IoMXfG0krdLE8V5J3+8DhIv3yuzBWt8OuIwQlEsYwC7oryCfwoaPymz9pPUunQHPvJfwH8MnOgrSM1IUiyc44WDROBiu/704FSukmGtenskW60mdJpQ1/sPIzNTo9WpAsu+pTdJ1a/9tg7rNjT1HhwqpoV0Gfa94JXB/vQs35zLXEKbTsex+25BIzHbFU+NQnpv1M61pRIcgX8tjdX9uhr3wpm72o3zQY1ZevITB9D3/S0tZHmLIjSJ5EuCwJEmeUl0uZP068FIY83J3AKtxI+3N+Oiyh963HzsUtji4cZBmlgwr+YVDfRHww=

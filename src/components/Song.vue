@@ -1,10 +1,10 @@
 <template>
     <div class="song">
         <div class="song-container row">
-          <div class="song-image col s6">
+          <div class="song-image col s4">
             <img class="responsive-img" :src="song.verseImage">
           </div>
-          <div class="col s6">
+          <div class="col s8">
             <div class="song-title">{{ song.title }}</div>
             <div class="song-controls">
               <button class="play btn btn-small" @click="togglePlay(song)">
@@ -94,10 +94,8 @@ export default {
 
 <style scoped>
 .play {
-  display: block;
-  margin-bottom: 2px;
 }
 .add-to-playlist {
-  display: block;
+  margin-left: 5px;
 }
 </style>

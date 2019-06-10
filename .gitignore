@@ -22,3 +22,6 @@ yarn-error.log*
 
 # Firebase generated files
 .firebase/*
+
+# logs files
+*.log
